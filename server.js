@@ -8,9 +8,10 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-// Eintrag gilt als online solange alle 30s ein /register kommt
+// Eintrag gilt als online solange alle 90s ein /register kommt
 // (Script sendet alle 5s, siehe Vexzron_pink.lua:4235)
-const TIMEOUT_MS = 30 * 1000;
+// 90s puffert Railway-Neustarts und Lag, ohne Geister-Einträge ewig zu behalten
+const TIMEOUT_MS = 90 * 1000;
 
 // Map: userId -> { username, userId, placeId, jobId, theme, lastSeen }
 const users = new Map();
