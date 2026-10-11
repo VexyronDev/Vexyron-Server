@@ -25,13 +25,3 @@ if data[uid] and (data[uid].jobId == "" or data[uid].jobId == game.JobId) then
 ```
 
 Wichtig: Tags sieht nur wer das Script ausführt (BillboardGui wird lokal erstellt).
-
-### Admin-Dashboard: Loader-Code selbst aktualisieren
-1. Railway → Service → `Variables` → setzen:
-   - `ADMIN_PASSWORD` = dein Passwort (frei wählen)
-   - `LOADER_URL` = `https://load.vexyron-official.workers.dev`
-   - `LOADER_TOKEN` = Token aus `worker.js`
-2. Neu deployen lassen, dann `https://xxx.up.railway.app/admin` öffnen
-3. Passwort eingeben → Code einfügen → `Loader aktualisieren`
-
-Ohne diese 3 Variablen bleibt `/admin` deaktiviert (Tag-Server läuft trotzdem).
