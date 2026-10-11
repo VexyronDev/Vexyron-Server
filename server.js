@@ -16,6 +16,27 @@ const TIMEOUT_MS = 90 * 1000;
 // Map: userId -> { username, userId, placeId, jobId, theme, lastSeen }
 const users = new Map();
 
+// Persistenz: überlebt Railway-Neustarts (mit Volume auch Redeploys)
+const fs = require("fs");
+const DATA_FILE = process.env.DATA_FILE || "./users.json";
+try {
+  const raw = fs.readFileSync(DATA_FILE, "utf8");
+  const arr = JSON.parse(raw);
+  if (Array.isArray(arr)) {
+    for (const u of arr) {
+      if (u && u.userId) users.set(String(u.userId), u);
+    }
+  }
+  console.log("Geladen: " + users.size + " Einträge aus " + DATA_FILE);
+} catch (e) {
+  console.log("Kein Speicher gefunden, starte leer.");
+}
+function save() {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify([...users.values()]));
+  } catch (e) { /* ignorieren: läuft auch ohne Speichern */ }
+}
+
 app.get("/", (req, res) => {
   res.json({ ok: true, online: users.size, endpoints: ["GET /users", "POST /register"] });
 });
@@ -31,6 +52,7 @@ app.post("/register", (req, res) => {
     theme: String(theme || "Yellow"),
     lastSeen: Date.now(),
   });
+  save();
   res.json({ ok: true });
 });
 
