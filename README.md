@@ -1,27 +1,29 @@
-# Vex Tag-Server (Railway)
+# Vexyron-Server (Railway)
 
-Backend für `Vexzron_pink.lua` – verbindet Spieler im gleichen Server für Nametags.
+Backend für `Vexyron.lua` – verbindet Spieler im gleichen Server für Nametags.
 
-### Endpoints
-- `POST /register` `{username, userId, placeId, jobId, theme}`
-- `GET /users` → `{users:[...]}` – optional `?jobId=xxx` für nur gleichen Server
-- `GET /` → Status
+Gepflegt wird nur noch `Vexyron.v2.lua` (enthält zusätzlich „Hide Nametags“).
 
-### Deploy auf Railway (2 Min)
-1. Diesen Ordner `tag-server/` auf GitHub pushen (eigenes Repo)
-2. Railway → New Project → Deploy from Repo → Repo wählen
-3. Networking → Generate Domain → URL kopieren, z.B. `https://xxx.up.railway.app`
-4. Test: `https://xxx.up.railway.app/users` muss `{"users":[]}` zeigen
+### Was der Server tut
+- `POST /register` – Spieler meldet sich an (`username, userId, placeId, jobId, theme`)
+- `GET /users` – alle angemeldeten Spieler, optional `?jobId=xxx` für nur den gleichen Server
+- `GET /` – Status (`online`-Zähler)
+- Einträge laufen nach 90s ohne Update ab und werden in `users.json` zwischengespeichert (überlebt Neustarts)
 
-### In Roblox-Lua ändern
-In `Vexzron_pink.lua` Zeile 72:
+### Live
+- Server: `https://web-production-563dd.up.railway.app`
+- Loader: `https://load.vexyron-official.workers.dev`
+- Test: `/users` muss `{"users":[...]}` zeigen (leer wenn keiner im Spiel ist)
+
+### Script verteilen (Loader)
+1. `Vexyron.v2.lua` ändern
+2. Auf Obfuskat-Website verschleiern
+3. Als `loader/obfuscated.lua` ins Repo legen (oder per `curl` auf `/update` laden)
+4. Gleicher Loadstring, keine Änderung im Spiel nötig:
 ```lua
-local SERVER_URL = "https://xxx.up.railway.app"
+loadstring(game:HttpGet("https://load.vexyron-official.workers.dev/?v=" .. os.time(), true))()
 ```
 
-Für nur-gleicher-Server in `updateTags()` filtern (siehe `lua-patch.lua`):
-```lua
-if data[uid] and (data[uid].jobId == "" or data[uid].jobId == game.JobId) then
-```
-
-Wichtig: Tags sieht nur wer das Script ausführt (BillboardGui wird lokal erstellt).
+### Wichtig
+- Tags sieht nur, wer das Script ausführt (BillboardGui wird lokal erstellt)
+- Jeder im Server braucht das Script mit gleicher `SERVER_URL`, sonst fehlt er in `/users`
