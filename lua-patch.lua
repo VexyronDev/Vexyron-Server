@@ -1,6 +1,4 @@
--- In Vexzron_pink.lua ersetzen:
-
--- NEU (Railway-URL einsetzen):
+-- In Vexyron-Server.lua ersetzen:
 local SERVER_URL = "https://xxx.up.railway.app"
 
 -- NUR-GLEICHER-SERVER-FILTER:
