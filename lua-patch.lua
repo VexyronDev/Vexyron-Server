@@ -1,8 +1,5 @@
 -- In Vexzron_pink.lua ersetzen:
 
--- ALT (Zeile 72):
--- local SERVER_URL = "https://desktop-llf055l.tail8fa333.ts.net"
-
 -- NEU (Railway-URL einsetzen):
 local SERVER_URL = "https://xxx.up.railway.app"
 
